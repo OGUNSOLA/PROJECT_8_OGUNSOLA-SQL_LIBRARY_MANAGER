@@ -35,7 +35,7 @@ router.get(
 router.get(
   "/new",
   asyncHandler(async (req, res) => {
-    res.render("books/new", { book: {} });
+    res.render("books/new", { book: {}, title: "Create New Book" });
   })
 );
 
@@ -64,6 +64,19 @@ router.get(
     const book = await Book.findByPk(req.params.id);
     if (book) {
       res.render("books/show", { book, title: book.title });
+    } else {
+      res.sendStatus(404);
+    }
+  })
+);
+
+// get update form
+router.get(
+  "/:id/edit",
+  asyncHandler(async (req, res) => {
+    const book = await Book.findByPk(req.params.id);
+    if (book) {
+      res.render("books/update", { book, title: "Update Book" });
     } else {
       res.sendStatus(404);
     }
