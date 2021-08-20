@@ -91,8 +91,8 @@ router.post(
     try {
       book = await Book.findByPk(req.params.id);
       if (book) {
-        // await book.update(req.body);
-        // res.redirect("/books/" + book.id);
+        await book.update(req.body);
+        res.redirect("/books/" + book.id);
         console.log(book);
       } else {
         res.sendStatus(404);
