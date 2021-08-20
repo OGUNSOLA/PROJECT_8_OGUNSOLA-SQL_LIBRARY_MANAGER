@@ -3,3 +3,10 @@ extends ../layout
 block content
   h2= book.title
   p= book.author
+
+  button 
+    a(href="/books/"+ book.id +"/edit")  EDIT BOOOK
+  button 
+    a(href="/books/"+ book.id +"/delete")  DELETE BOOOK
+  button 
+    a(href="/") BACK TO BOOKS LIST
