@@ -1,6 +1,6 @@
 extends ../layout
 
 block content
-    form(action="/books/result", method="post")    
+    form(action= "/books/search", method="get")    
         input(type="text" placeholder="SERCH FOR BOOK")
-        input(type="submit")
+        input(type="submit" value="SEARCH")
