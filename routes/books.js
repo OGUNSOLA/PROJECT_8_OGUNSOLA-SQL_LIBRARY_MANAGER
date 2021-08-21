@@ -129,9 +129,9 @@ router.post(
   asyncHandler(async (req, res) => {
     const book = await Book.findByPk(req.params.id);
     if (book) {
-      console.log(book);
+      console.log("book: ", book);
       await book.destroy();
-      res.redirect("/books");
+      res.redirect("/");
     } else {
       res.sendStatus(400);
     }

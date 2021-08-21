@@ -100,3 +100,8 @@ input[type="text"] {
 .error {
   color: rgb(236, 15, 15);
 }
+
+.btn {
+  display: block;
+  margin-top: 10px;
+}
