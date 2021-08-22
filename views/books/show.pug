@@ -1,14 +1,15 @@
 extends ../layout
 
 block content
-  h2= book.title
-  p= `Author: ${book.author}`
-  p= ` Genre: ${book.genre}`
-  p= ` Year published: ${book.year}`
+  div(class="container")
+    h2= book.title
+    p= `Author: ${book.author}`
+    p= ` Genre: ${book.genre}`
+    p= ` Year published: ${book.year}`
 
-  button(class="btn") 
-    a(href="/books/"+ book.id +"/edit")  EDIT BOOOK
-  button(class="btn")  
-    a(href="/books/"+ book.id +"/delete")  DELETE BOOOK
-  button(class="btn")  
-    a(href="/") BACK TO BOOKS LIST
+    button(class="btn") 
+      a(href="/books/"+ book.id +"/edit")  EDIT BOOOK
+    button(class="btn")  
+      a(href="/books/"+ book.id +"/delete")  DELETE BOOOK
+    button(class="btn")  
+      a(href="/") BACK TO BOOKS LIST

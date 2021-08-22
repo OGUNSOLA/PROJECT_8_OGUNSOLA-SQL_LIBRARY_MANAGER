@@ -5,6 +5,27 @@ body {
   font: 18px "Garamond", serif;
 }
 
+.listContainer {
+  margin: 0 auto;
+  width: 70%;
+}
+
+.updateForm {
+  width: 50%;
+  border: 5px solid black;
+}
+.container {
+  border: 5px solid black;
+  width: 30%;
+  padding: 20px;
+  font-weight: bold;
+}
+
+.container > button {
+  height: 25px;
+  width: 165px;
+}
+
 a {
   color: #019875;
   text-decoration: none;
@@ -77,11 +98,29 @@ td {
   padding: 5px 20px 5px 10px;
 }
 
+.formClass {
+  width: 700px;
+  padding: 30px;
+}
+.formClass > div {
+  display: flex;
+  justify-content: space-between;
+  margin-right: 200px;
+}
 label {
   font-weight: bold;
   min-width: 130px;
   display: inline-block;
   transition: 0.4s;
+}
+
+.forClassButton {
+  margin-top: 30px;
+  margin-left: 175px;
+}
+
+.forClassButton > button {
+  margin-right: 150px;
 }
 
 input {
@@ -105,4 +144,14 @@ input[type="text"] {
 .btn {
   display: block;
   margin-top: 10px;
+}
+
+.pageNav {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.pageNav > h3,
+button {
+  margin-right: 50px;
 }
