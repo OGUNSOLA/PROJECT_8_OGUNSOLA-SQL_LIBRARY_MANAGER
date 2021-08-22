@@ -20,19 +20,22 @@ block content
           td #{book.author} 
           td #{book.genre} 
           td #{book.year}
-  h3 #{page} of #{numberOfPages}
+  if numberOfPages > 0
+    h3 #{page} of #{numberOfPages}
+  else
+    h3 "NO RESULT"
   if numberOfPages > 1
-    if page === 1 || page < numberOfPages
+    if page === 1
       button(class="btn") 
-        a(href="/books/search?search=${search}&page=${page+1}") NEXT
+        a(href=`/books/search?search=${search.toLowerCase()}&page=${page+1}`) NEXT
     else if page > 1 && page < numberOfPages
       button(class="btn") 
-        a(href="/books/search?search=#{search}&page=#{page-1}") PREV
+        a(href=`/books/search?search=${search.toLowerCase()}&page=${page-1}`) PREV
       button(class="btn") 
-        a(href="/books/search?search=${search}&page=${page-1}") NEXT
+        a(href=`/books/search?search=${search.toLowerCase()}&page=${page+1}`) NEXT
     else if page === numberOfPages
       button(class="btn") 
-        a(href="/books/search?search=${search}&page=${page-1}") PREV
+        a(href=`/books/search?search=${search.toLowerCase()}&page=${page-1}`) PREV
 
 
 

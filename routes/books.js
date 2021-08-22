@@ -23,7 +23,7 @@ function asyncHandler(cb) {
 router.get(
   "/",
   asyncHandler(async (req, res) => {
-    const limit = 3;
+    const limit = 5;
     const { count, rows } = await Book.findAndCountAll({
       where: {
         [Op.or]: {
@@ -41,9 +41,9 @@ router.get(
           },
         },
       },
-      order: [["title", "ASC"]],
+      order: [["title"]],
       limit: limit,
-      offset: 6,
+      offset: 0,
     });
     const numberOfPages = Math.ceil(count / limit);
     const search = "";
@@ -52,7 +52,7 @@ router.get(
       books: rows,
       title: "Books",
       numberOfPages: numberOfPages,
-      page: 2,
+      page: 1,
       search,
     });
   })
@@ -85,12 +85,12 @@ router.post(
   })
 );
 
-// Search for a book route
+// // Search for a book route
 router.get(
   "/search",
   asyncHandler(async (req, res) => {
-    // console.log("search");
-    const search = req.body.search;
+    const limit = 5;
+    const search = req.body.search || req.query.search || "";
     let page = parseInt(req.query.page);
     if (!page) {
       page = 1;
@@ -113,12 +113,12 @@ router.get(
           },
         },
       },
-      order: [["title", "ASC"]],
-      limit: 10,
-      offset: (page - 1) * 10,
+      order: [["title"]],
+      limit: limit,
+      offset: (page - 1) * limit,
     });
     console.log("count:", count);
-    const numberOfPages = Math.ceil(count / 10);
+    const numberOfPages = Math.ceil(count / limit);
     res.render("index", {
       books: rows,
       title: "Books",
@@ -150,7 +150,11 @@ router.get(
   asyncHandler(async (req, res) => {
     const book = await Book.findByPk(req.params.id);
     if (book) {
-      res.render("books/update", { book, title: "Update Book" });
+      res.render("books/update", {
+        book,
+        title: "Update Book",
+        buttonTitle: "UPDATE",
+      });
     } else {
       res.sendStatus(404);
     }
@@ -190,9 +194,7 @@ router.get(
   asyncHandler(async (req, res) => {
     const book = await Book.findByPk(req.params.id);
     if (book) {
-      res.render("books/delete", { book, title: "delete book" });
-    } else {
-      res.sendStatus(404);
+      res.render("books/delete", { book });
     }
   })
 );
@@ -202,6 +204,7 @@ router.post(
   "/:id/delete",
   asyncHandler(async (req, res) => {
     const book = await Book.findByPk(req.params.id);
+    console.log("book: ", book.title);
     if (book) {
       console.log("book: ", book);
       await book.destroy();

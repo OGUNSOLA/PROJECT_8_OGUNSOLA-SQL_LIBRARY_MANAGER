@@ -1,9 +1,14 @@
 extends ../layout
 
 block content 
-
-    form(action="/books/" +book.id +"/delete", method="post") 
-        include form
-        button(class="btn") 
+    p #{book.title}
+    p #{book.author}
+    p #{book.genre}
+    p #{book.year}
+    form(action="/books/" +book.id +"/delete", method="post")
+        p ARE YOU SURE YOU WANT TO DELETE THIS BOOK?
+        button(class="btn" ) 
             a(href="/") CANCEL
+        input(type="submit" class="btn" value=buttonTitle)
+        
 

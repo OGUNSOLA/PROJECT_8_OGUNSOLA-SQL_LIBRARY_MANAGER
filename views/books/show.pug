@@ -2,7 +2,9 @@ extends ../layout
 
 block content
   h2= book.title
-  p= book.author
+  p= `Author: ${book.author}`
+  p= ` Genre: ${book.genre}`
+  p= ` Year published: ${book.year}`
 
   button(class="btn") 
     a(href="/books/"+ book.id +"/edit")  EDIT BOOOK
