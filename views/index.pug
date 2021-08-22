@@ -20,3 +20,19 @@ block content
           td #{book.author} 
           td #{book.genre} 
           td #{book.year}
+  h3 #{page} of #{numberOfPages}
+  if numberOfPages > 1
+    if page === 1 || page < numberOfPages
+      button(class="btn") 
+        a(href="/books/search?search=${search}&page=${page+1}") NEXT
+    else if page > 1 && page < numberOfPages
+      button(class="btn") 
+        a(href="/books/search?search=#{search}&page=#{page-1}") PREV
+      button(class="btn") 
+        a(href="/books/search?search=${search}&page=${page-1}") NEXT
+    else if page === numberOfPages
+      button(class="btn") 
+        a(href="/books/search?search=${search}&page=${page-1}") PREV
+
+
+

@@ -23,11 +23,12 @@ function asyncHandler(cb) {
 router.get(
   "/",
   asyncHandler(async (req, res) => {
-    const { findAndCountAll, rows } = await Book.findAndCountAll({
+    const limit = 3;
+    const { count, rows } = await Book.findAndCountAll({
       where: {
         [Op.or]: {
           title: {
-            [Op.like]: `%%`, // "a " is a placeholder for search terrm for now
+            [Op.like]: `%%`,
           },
           author: {
             [Op.like]: `%%`,
@@ -41,9 +42,19 @@ router.get(
         },
       },
       order: [["title", "ASC"]],
-      limit: 10,
+      limit: limit,
+      offset: 6,
     });
-    res.render("index", { books: rows, title: "Books" });
+    const numberOfPages = Math.ceil(count / limit);
+    const search = "";
+    let page;
+    res.render("index", {
+      books: rows,
+      title: "Books",
+      numberOfPages: numberOfPages,
+      page: 2,
+      search,
+    });
   })
 );
 
@@ -71,6 +82,52 @@ router.post(
         throw error;
       }
     }
+  })
+);
+
+// Search for a book route
+router.get(
+  "/search",
+  asyncHandler(async (req, res) => {
+    // console.log("search");
+    const search = req.body.search;
+    let page = parseInt(req.query.page);
+    if (!page) {
+      page = 1;
+    }
+    console.log("page: ", page);
+    const { count, rows } = await Book.findAndCountAll({
+      where: {
+        [Op.or]: {
+          title: {
+            [Op.like]: `%${search}%`,
+          },
+          author: {
+            [Op.like]: `%${search}%`,
+          },
+          genre: {
+            [Op.like]: `%${search}%`,
+          },
+          year: {
+            [Op.like]: `%${search}%`,
+          },
+        },
+      },
+      order: [["title", "ASC"]],
+      limit: 10,
+      offset: (page - 1) * 10,
+    });
+    console.log("count:", count);
+    const numberOfPages = Math.ceil(count / 10);
+    res.render("index", {
+      books: rows,
+      title: "Books",
+      numberOfPages: numberOfPages,
+      page,
+      search,
+    });
+
+    console.log("search:", req.query.search);
   })
 );
 
@@ -152,14 +209,6 @@ router.post(
     } else {
       res.sendStatus(400);
     }
-  })
-);
-
-// Search for a book route
-router.get(
-  "/searcch",
-  asyncHandler(async (req, res) => {
-    console.log("search");
   })
 );
 
