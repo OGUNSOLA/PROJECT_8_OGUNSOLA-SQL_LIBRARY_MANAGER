@@ -23,7 +23,7 @@ function asyncHandler(cb) {
 router.get(
   "/",
   asyncHandler(async (req, res) => {
-    const limit = 5;
+    const limit = 10;
     const { count, rows } = await Book.findAndCountAll({
       where: {
         [Op.or]: {
@@ -89,7 +89,7 @@ router.post(
 router.get(
   "/search",
   asyncHandler(async (req, res) => {
-    const limit = 5;
+    const limit = 10;
     const search = req.body.search || req.query.search || "";
     let page = parseInt(req.query.page);
     if (!page) {
