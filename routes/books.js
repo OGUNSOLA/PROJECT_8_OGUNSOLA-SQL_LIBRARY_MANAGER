@@ -63,12 +63,12 @@ router.get(
 router.get(
   "/new",
   asyncHandler(async (req, res) => {
-    res.render("books/new", { book: {}, title: "Create New Book" });
+    res.render("books/new-book", { book: {}, title: "Create New Book" });
   })
 );
 
 router.post(
-  "/",
+  "/new",
   asyncHandler(async (req, res) => {
     let book;
     try {
@@ -77,7 +77,7 @@ router.post(
     } catch (error) {
       if (error.name === "SequelizeValidationError") {
         book = await Book.build(req.body);
-        res.render("books/new", { book, errors: error.errors });
+        res.render("books/new-book", { book, errors: error.errors });
       } else {
         throw error;
       }
@@ -139,7 +139,11 @@ router.get(
     if (book) {
       res.render("books/show", { book, title: book.title });
     } else {
-      res.sendStatus(404);
+      const error = new Error();
+      error.status = 404;
+      error.message = "The book you are looking for does not exist";
+      console.log(error);
+      throw error;
     }
   })
 );
@@ -150,13 +154,16 @@ router.get(
   asyncHandler(async (req, res) => {
     const book = await Book.findByPk(req.params.id);
     if (book) {
-      res.render("books/update", {
+      res.render("books/update-book", {
         book,
         title: "Update Book",
         buttonTitle: "UPDATE",
       });
     } else {
-      res.sendStatus(404);
+      const err = new Error();
+      err.status = 404;
+      err.message = `The Book you are looking for doent exist.`;
+      next(err);
     }
   })
 );
@@ -171,7 +178,6 @@ router.post(
       if (book) {
         await book.update(req.body);
         res.redirect("/books/" + book.id);
-        console.log(book);
       } else {
         res.sendStatus(404);
       }
@@ -210,7 +216,7 @@ router.post(
       await book.destroy();
       res.redirect("/");
     } else {
-      res.sendStatus(400);
+      res.sendStatus(404);
     }
   })
 );

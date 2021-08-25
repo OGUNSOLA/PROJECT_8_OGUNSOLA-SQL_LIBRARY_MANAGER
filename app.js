@@ -38,24 +38,19 @@ app.use("/books", booksRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
-  const error = new Error();
-  error.message = " Page Not Found";
-  error.status = 400;
-  console.log(`Error Occured, Error ${error.status}: ${error.message}`);
-  res.render("books/pageNotFound", { error: error });
-
-  next();
+  const err = new Error("The book you are looking for does not exist");
+  err.status = 404;
+  next(err);
 });
 
 // error handler
-app.use(function (err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get("env") === "development" ? err : {};
-
-  // render the error page
-  res.status(err.status || 500);
-  res.render("error");
+app.use((err, req, res, next) => {
+  if (err.status === 404) {
+    res.status(404).render("page-not-found", { err });
+  } else {
+    err.message = err.message || "Something went wrong";
+    res.status(err.status || 500).render("error", { err });
+  }
 });
 
 module.exports = app;
