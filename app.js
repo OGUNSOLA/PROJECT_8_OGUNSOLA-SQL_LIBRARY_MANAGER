@@ -37,10 +37,8 @@ app.use("/", indexRouter);
 app.use("/books", booksRouter);
 
 // catch 404 and forward to error handler
-app.use(function (req, res, next) {
-  const err = new Error("The book you are looking for does not exist");
-  err.status = 404;
-  next(err);
+app.use((req, res, next) => {
+  res.status(404).render(page - not - found);
 });
 
 // error handler

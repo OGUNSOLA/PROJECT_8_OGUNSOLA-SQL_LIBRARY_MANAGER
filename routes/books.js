@@ -139,11 +139,10 @@ router.get(
     if (book) {
       res.render("books/show", { book, title: book.title });
     } else {
-      const error = new Error();
-      error.status = 404;
-      error.message = "The book you are looking for does not exist";
-      console.log(error);
-      throw error;
+      const err = new Error();
+      err.status = 404;
+      err.message = "The book you are looking for does not exist";
+      next(err);
     }
   })
 );
