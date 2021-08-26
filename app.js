@@ -38,16 +38,16 @@ app.use("/books", booksRouter);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
-  res.status(404).render(page - not - found);
+  res.status(404).render("page-not-found", { error: err });
 });
 
 // error handler
 app.use((err, req, res, next) => {
   if (err.status === 404) {
-    res.status(404).render("page-not-found", { err });
+    res.status(404).render("page-not-found", { error: err });
   } else {
     err.message = err.message || "Something went wrong";
-    res.status(err.status || 500).render("error", { err });
+    res.status(err.status || 500).render("error", { error: err });
   }
 });
 
