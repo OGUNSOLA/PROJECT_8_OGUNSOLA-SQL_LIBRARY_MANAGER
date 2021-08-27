@@ -98,6 +98,7 @@ router.get(
   })
 );
 
+// get new book form page
 router.get(
   "/new",
   asyncHandler(async (req, res) => {
@@ -105,6 +106,7 @@ router.get(
   })
 );
 
+// create a new book
 router.post(
   "/new",
   asyncHandler(
