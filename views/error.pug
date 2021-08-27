@@ -1,7 +1,7 @@
 extends layout
 
 block content
-  h1= message
-  h2= error.status
+  h1.errors= message
+  h2.errors= error.status
   img.error_img(src='/images/server_error.jpg')
   pre #{error.stack}

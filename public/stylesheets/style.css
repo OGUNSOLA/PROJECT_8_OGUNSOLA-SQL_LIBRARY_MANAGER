@@ -155,3 +155,10 @@ input[type="text"] {
 button {
   margin-right: 50px;
 }
+.errors {
+  color: red;
+}
+
+.error_img {
+  max-width: 500px;
+}
