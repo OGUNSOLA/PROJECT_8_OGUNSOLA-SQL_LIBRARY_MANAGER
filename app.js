@@ -1,27 +1,16 @@
 /** @format */
 
-const createError = require("http-errors");
-const express = require("express");
-const path = require("path");
-const cookieParser = require("cookie-parser");
-const logger = require("morgan");
+var createError = require("http-errors");
+var express = require("express");
+var path = require("path");
+var cookieParser = require("cookie-parser");
+var logger = require("morgan");
 
-const indexRouter = require("./routes/index");
-const booksRouter = require("./routes/books");
-
-const app = express();
-
+var indexRouter = require("./routes/index");
+var booksRouter = require("./routes/books");
 const models = require("./models");
 
-(async () => {
-  await models.sequelize.sync();
-  try {
-    models.sequelize.authenticate();
-    console.log("Connection to the database successful");
-  } catch (error) {
-    console.log("Error connecting to the database", error);
-  }
-})();
+var app = express();
 
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
@@ -36,18 +25,37 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use("/", indexRouter);
 app.use("/books", booksRouter);
 
+(async () => {
+  await models.sequelize.sync();
+  try {
+    models.sequelize.authenticate();
+    console.log("Connection to the database successful");
+  } catch (error) {
+    console.log("Error connecting to the database", error);
+  }
+})();
+
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
-  res.status(404).render("page-not-found", { error: err });
+  const error = new Error();
+  error.status = 404;
+  error.messge =
+    " oh oh!. Looks like the book you are looking for doesnt exist yet! ";
+  next(error);
 });
 
 // error handler
-app.use((err, req, res, next) => {
-  if (err.status === 404) {
-    res.status(404).render("page-not-found", { error: err });
+app.use((error, req, res, next) => {
+  if (error) {
+    console.log("Global error handler called");
+  }
+  if (error.status === 404) {
+    res.status(404).render("books/page-not-found", { error });
+    console.log(error);
   } else {
-    err.message = err.message || "Something went wrong";
-    res.status(err.status || 500).render("error", { error: err });
+    error.message = `Bummer!  It looks like something went wrong on the server.`;
+    res.status(error.status || 500).render("error", { error });
+    console.log(error);
   }
 });
 
