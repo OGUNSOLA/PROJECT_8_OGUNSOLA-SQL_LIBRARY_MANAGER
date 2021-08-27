@@ -11,7 +11,7 @@ function asyncHandler(cb) {
       await cb(req, res, next);
     } catch (error) {
       // Forward error to the global error handler
-      res.status(500).send(error);
+      next(error);
     }
   };
 }
@@ -107,34 +107,37 @@ router.get(
 
 router.post(
   "/new",
-  asyncHandler(async (req, res) => {
-    let book;
-    try {
+  asyncHandler(
+    asyncHandler(async (req, res) => {
+      let book;
+
       book = await Book.create(req.body);
-      res.redirect("/books/" + book.id);
-    } catch (error) {
+      if (book) {
+        res.redirect("/books/" + book.id);
+      }
+
       if (error.name === "SequelizeValidationError") {
         book = await Book.build(req.body);
         res.render("books/new-book", { book, errors: error.errors });
       } else {
         throw error;
       }
-    }
-  })
+    })
+  )
 );
 
 //get indiviadual book
 router.get(
   "/:id",
-  asyncHandler(async (req, res) => {
+  asyncHandler(async (req, res, next) => {
     const book = await Book.findByPk(req.params.id);
     if (book) {
       res.render("books/show", { book, title: book.title });
     } else {
-      const err = new Error();
-      err.status = 404;
-      err.message = "The book you are looking for does not exist";
-      next(err);
+      const error = new Error();
+      error.status = 404;
+      error.message = "The book you are looking for does not exist";
+      next(error);
     }
   })
 );
